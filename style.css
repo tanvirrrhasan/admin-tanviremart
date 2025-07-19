@@ -1,0 +1,621 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #7ed1b8;
+  color: #000000;
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+.slogan {
+  color: #ff9800;
+  margin-bottom: 2rem;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: #1e6624;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  min-width: 280px;
+  margin-bottom: 0; /* Remove default form margin-bottom, handled by padding-bottom on main-content */
+}
+input, select, textarea, button {
+  padding: 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #71da1c;
+  font-size: 1rem;
+}
+button {
+  background: #2db80a;
+  color: #000000;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+button:hover {
+  background: #387c31;
+}
+.error {
+  color: #b93220;
+  font-size: 0.95em;
+  margin-top: -0.5rem;
+}
+.hidden {
+  display: none !important;
+}
+
+#dashboard-section {
+  display: flex;
+  flex-direction: row;
+  height: 100vh; /* Takes full viewport height */
+}
+
+#sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 220px;
+  min-width: 180px;
+  max-width: 220px;
+  background: #342518;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem 0.5rem;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.10);
+  overflow-y: auto; /* Enable scrolling for sidebar if its content overflows */
+  box-sizing: border-box; /* Include padding in width/height */
+  height: 100vh; /* Ensure sidebar takes full height */
+}
+
+#sidebar h3 {
+  color: #18af2c;
+  margin-bottom: 1.5rem;
+}
+#sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+#sidebar li {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+#sidebar li:hover, #sidebar li.active {
+  background: #569db9;
+  color: #211eb8;
+}
+
+#main-content {
+  flex: 1;
+  padding: 1.2rem 0.5rem;
+  min-width: 0;
+  overflow-x: hidden; /* No horizontal scroll */
+  box-sizing: border-box; /* Include padding in height */
+}
+
+.card {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1.2rem; /* Keep existing margin for spacing between cards */
+}
+
+.google-btn {
+  margin-top: 1rem;
+  background: #f0f0f0;
+  color: #222;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.google-btn:hover {
+  background: #e0e0e0;
+}
+
+table {
+  min-width: 500px;
+  width: 100%;
+  overflow-x: auto;
+  display: block;
+  font-size: 0.9em;
+  table-layout: fixed;
+}
+table, th, td {
+  font-size: 0.95em;
+  word-break: break-word;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+/* Specific mobile table column widths */
+table th:nth-child(1), table td:nth-child(1) { /* Name column */
+  width: 35%;
+  max-width: 150px;
+}
+table th:nth-child(2), table td:nth-child(2) { /* Price column */
+  width: 20%;
+}
+table th:nth-child(3), table td:nth-child(3) { /* Category column */
+  width: 20%;
+}
+table th:nth-child(4), table td:nth-child(4) { /* Stock column */
+  width: 10%;
+}
+table th:nth-child(5), table td:nth-child(5) { /* Actions column */
+  width: 15%;
+}
+#dashboard-products {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Sticky Save Product button wrapper - GLOBAL */
+.sticky-save-btn-wrapper {
+  position: fixed;
+  bottom: 0;
+  background: #1e6624;
+  padding: 1rem 0.5rem 0.5rem 0.5rem; /* Added horizontal padding for consistent look */
+  z-index: 9999; /* Ensure it's always on top */
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+  box-sizing: border-box; 
+}
+
+#add-product-form button[type="submit"] {
+  position: static; /* Button itself is static within its flex parent */
+  margin-top: 0;
+  width: 90%; /* Responsive width within its parent container */
+  max-width: 380px; /* Aesthetics: prevent it from becoming too wide */
+  margin: 0 auto; /* Center the button */
+  box-sizing: border-box; 
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 700px) {
+  html, body {
+    overflow-y: auto; /* Allow body to scroll on mobile */
+    height: auto; /* Allow content to dictate height */
+  }
+  #dashboard-section {
+    flex-direction: column; /* Changed to column for mobile layout */
+    height: auto; /* Allow content to dictate height on mobile */
+  }
+  #sidebar {
+    position: fixed; /* Still fixed on mobile */
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 201;
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+    height: 100vh;
+    background: #342518;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.18);
+    min-width: 90px;
+    max-width: 120px;
+    width: 28vw;
+    padding: 0.7rem 0.2rem;
+    font-size: 0.95em;
+    gap: 0.7rem;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.10);
+    border-bottom: none;
+    border-right: 1px solid #493422;
+  }
+  #sidebar.active {
+    transform: translateX(0);
+  }
+  #sidebar-overlay {
+    display: none;
+    position: fixed;
+    z-index: 200;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+  }
+  #sidebar.active + #sidebar-overlay {
+    display: block;
+  }
+  #main-content {
+    padding-left: 0 !important; /* Mobile layout removes left padding for sidebar */
+    padding-top: 72px !important; /* Account for mobile topbar */
+    padding-right: 0.5rem !important;
+    padding-bottom: 150px !important; /* Sufficient padding for mobile fixed button */
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: visible; /* Allow content to expand and contribute to body scroll */
+    margin-left: 0; /* Remove margin-left on mobile */
+    height: auto; /* Allow content to dictate height, enabling body scroll */
+  }
+  .menu-btn {
+    display: block !important;
+  }
+  .card, form {
+    padding: 0.7rem;
+    font-size: 0.98em;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  input, select, textarea {
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+  .card > div, #products-list {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table {
+    min-width: 600px;
+    width: auto;
+    display: table;
+    overflow-x: auto;
+    font-size: 0.9em;
+    table-layout: auto;
+  }
+  table th, table td {
+    max-width: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  table th:nth-child(1), table td:nth-child(1),
+  table th:nth-child(2), table td:nth-child(2),
+  table th:nth-child(3), table td:nth-child(3),
+  table th:nth-child(4), table td:nth-child(4),
+  table th:nth-child(5), table td:nth-child(5) {
+    width: auto;
+  }
+  .dashboard-flex {
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  #mobile-topbar {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 56px;
+    background: #342518;
+    color: #fff;
+    z-index: 300;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+  .store-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-left: 16px;
+    letter-spacing: 1px;
+    color: #fff;
+  }
+  .menu-btn {
+    display: block !important;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    margin-right: 8px;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    background: #342518;
+  }
+  #dashboard-products {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem !important;
+    width: 100% !important;
+  }
+  #dashboard-products > div {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+  .product-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+  .sticky-save-btn-wrapper {
+    left: 0;
+    right: 0;
+    padding: 1rem; /* Full padding for mobile fixed button */
+    border-top: 1px solid rgba(0,0,0,0.1);
+  }
+}
+
+.menu-btn {
+  display: none;
+}
+
+/* Desktop specific adjustments */
+@media (min-width: 701px) {
+  html, body {
+    overflow: hidden; /* Restrict body scrolling on desktop */
+    height: 100%; /* Ensure full height */
+  }
+  #mobile-topbar {
+    display: none !important;
+  }
+  .menu-btn {
+    display: none !important;
+  }
+  #sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 220px;
+    height: 100vh; /* Fixed sidebar takes full height */
+    overflow-y: auto; /* Allow sidebar itself to scroll if content overflows */
+    z-index: 201;
+  }
+  #main-content {
+    margin-left: 220px; /* Push main content past fixed sidebar */
+    height: 100vh; /* Main content takes full height for its own scrolling */
+    overflow-y: auto; /* Ensure main content scrolls independently */
+    padding-bottom: 150px; /* Generous padding for desktop to prevent content being hidden by fixed button */
+  }
+  .dashboard-flex {
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+  }
+  .sticky-save-btn-wrapper {
+    left: 220px; /* Aligns with #main-content start */
+    right: 0; /* Ensures it spans the entire main content area relative to viewport */
+    padding-left: 0.5rem; /* Matches main-content horizontal padding */
+    padding-right: 0.5rem; /* Matches main-content horizontal padding */
+  }
+}
+ 
+.product-name-table {
+  background-color: #388e3c;
+  color: #fff;
+  font-weight: bold;
+}
+.product-category-table {
+  background-color: #00695c;
+  color: #fff;
+  font-weight: bold;
+}
+/* Warranty column is the 5th column in the table */
+#products-list table td:nth-child(5) {
+  background-color: #455a64;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-confirmed {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-processing {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-shipped {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.status-delivered {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Order Management Buttons */
+.view-order-btn, .update-status-btn {
+    padding: 6px 12px;
+    margin: 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.view-order-btn {
+    background: #007bff;
+    color: white;
+}
+
+.view-order-btn:hover {
+    background: #0056b3;
+}
+
+.update-status-btn {
+    background: #28a745;
+    color: white;
+}
+
+.update-status-btn:hover {
+    background: #1e7e34;
+}
+ 
+/* Login Container Styles */
+#login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.login-box {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-box h2 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.login-box p {
+    margin-bottom: 1.5rem;
+    color: #666;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.input-group span {
+    padding: 0 10px;
+    background: #f9f9f9;
+    border-right: 1px solid #ddd;
+    color: #555;
+}
+
+#phone-number {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    outline: none;
+}
+
+#phone-number[readonly] {
+    background-color: #eee;
+    color: #555;
+    cursor: not-allowed;
+}
+
+#google-signin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #4285F4;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+#google-signin-btn:hover {
+    background-color: #357ae8;
+}
+
+#google-signin-btn img {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    background-color: #fff;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+#login-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: #f38124;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+#login-container button:hover {
+    background-color: #e0701a;
+}
+
+#otp-section {
+    margin-top: 1rem;
+}
+
+#otp-code {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.error {
+    color: #e53935;
+    margin-top: 1rem;
+    min-height: 1em;
+}
+
+/* Responsive Styles for Login */
+@media (max-width: 480px) {
+    .login-box {
+        padding: 1.5rem;
+    }
+}
+
+#admin-panel {
+    display: none; /* Initially hidden */
+}
+ 

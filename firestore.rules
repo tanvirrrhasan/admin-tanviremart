@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is the authorized admin
+    function isAuthorizedAdmin() {
+      return request.auth != null && request.auth.token.email == 'tanvirrrhasan@gmail.com';
+    }
+    
+    // Allow public read access to products and categories
+    match /products/{document} {
+      allow read: if true;
+      allow write: if isAuthorizedAdmin();
+    }
+    
+    match /categories/{document} {
+      allow read: if true;
+      allow write: if isAuthorizedAdmin();
+    }
+    
+    // Allow anyone to create orders, but only admin can read/write
+    match /orders/{document} {
+      allow create: if true;
+      allow read, write: if isAuthorizedAdmin();
+    }
+    
+    // Allow admin access to all other collections
+    match /{document=**} {
+      allow read, write: if isAuthorizedAdmin();
+    }
+  }
+} 
